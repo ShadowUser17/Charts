@@ -1,0 +1,19 @@
+{{ if .Values.service.create -}}
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  labels:
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+spec:
+  selector:
+    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  ports:
+    - name: {{ .Values.service.name | default "http" | quote }}
+      port: {{ .Values.service.port }}
+      protocol: "TCP"
+      targetPort: {{ .Values.service.port }}
+{{ end -}}

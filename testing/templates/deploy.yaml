@@ -1,0 +1,59 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  labels:
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+spec:
+  replicas: {{ .Values.deploy.replicas }}
+  strategy:
+    type: "{{ .Values.deploy.strategy }}"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+    spec:
+      {{ if .Values.serviceAccount.name -}}
+      serviceAccount: "{{ .Values.serviceAccount.name }}"
+      {{ else -}}
+      serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}"
+      {{ end -}}
+      {{ if .Values.deploy.securityContext.create -}}
+      securityContext:
+        fsGroup: {{ .Values.deploy.securityContext.fsGroup }}
+        runAsUser: {{ .Values.deploy.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.deploy.securityContext.runAsGroup }}
+      {{ end -}}
+      {{ if .Values.configMap.create -}}
+      volumes:
+        - name: "{{ .Release.Name }}-{{ .Chart.Name }}-config"
+          configMap:
+            name: "{{ .Release.Name }}-{{ .Chart.Name }}-config"
+      {{ end -}}
+      containers:
+        - name: {{ .Values.containers.image | default "app" | quote }}
+          image: "{{ .Values.containers.image }}"
+          imagePullPolicy: "IfNotPresent"
+          {{ if .Values.configMap.create -}}
+          volumeMounts:
+            - name: "{{ .Release.Name }}-{{ .Chart.Name }}-config"
+              mountPath: "{{ .Values.configMap.mountPath }}"
+          {{ end -}}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              protocol: "TCP"
+          {{ if .Values.containers.resources.create -}}
+          resources:
+            requests:
+              cpu: {{ .Values.containers.resources.cpu | default "30m" | quote }}
+              memory: {{ .Values.containers.resources.memory | default "100mi" | quote }}
+            limits:
+              cpu: {{ .Values.containers.resources.cpu | default "30m" | quote }}
+              memory: {{ .Values.containers.resources.memory | default "100mi" | quote }}
+          {{ end -}}

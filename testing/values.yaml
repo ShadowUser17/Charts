@@ -1,0 +1,23 @@
+namespace:
+  create: false
+
+serviceAccount:
+  create: true
+
+configMap:
+  create: false
+
+deploy:
+  replicas: 1
+  strategy: "Recreate"
+  securityContext:
+    create: false
+
+containers:
+  image: "nginx:latest"
+  resources:
+    create: false
+
+service:
+  create: true
+  port: 80
