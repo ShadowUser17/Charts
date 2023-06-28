@@ -14,6 +14,12 @@ kind: "ServiceAccount"
 metadata:
   namespace: "{{ .Release.Namespace }}"
   name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  {{ if .Values.sa_annotations -}}
+  annotations:
+    {{- range $k, $v := .Values.sa_annotations }}
+    {{ $k }}: {{ $v | quote }}
+    {{- end }}
+  {{ end -}}
   labels:
     app.kubernetes.io/instance: "{{ .Release.Name }}"
     app.kubernetes.io/version: "{{ .Chart.Version }}"

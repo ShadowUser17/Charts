@@ -1,4 +1,7 @@
 namespace_create: false
+sa_annotations:
+  eks.amazonaws.com/role-arn: ""
+  eks.amazonaws.com/sts-regional-endpoints: "true"
 
 nginx:
   image: "nginx:1.25.1"
