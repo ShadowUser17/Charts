@@ -22,7 +22,11 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "3100"
     spec:
+      {{ if .Values.sa_name -}}
+      serviceAccount: "{{ .Values.sa_name }}"
+      {{ else -}}
       serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}"
+      {{ end -}}
       volumes:
         - name: "config"
           configMap:

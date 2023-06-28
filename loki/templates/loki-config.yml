@@ -43,7 +43,8 @@ data:
         cache_ttl: "24h"
       aws:
         region: "{{ .Values.loki.aws_region }}"
-        bucketnames: "{{ .Values.loki.aws_bucket }}"
+        endpoint: "{{ .Values.loki.s3_endpoint }}"
+        bucketnames: "{{ .Values.loki.s3_bucket }}"
         s3forcepathstyle: true
         sse_encryption: false
         insecure: false
@@ -81,5 +82,5 @@ data:
       storage:
         type: "s3"
         s3:
-          bucketnames: "{{ .Values.loki.aws_bucket }}"
+          bucketnames: "{{ .Values.loki.s3_bucket }}"
           s3forcepathstyle: true
