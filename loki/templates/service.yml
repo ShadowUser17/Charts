@@ -45,7 +45,7 @@ metadata:
     app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   selector:
-    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-gw"
+    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
   ports:
     - name: "http"
       port: 3100

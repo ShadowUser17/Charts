@@ -1,0 +1,67 @@
+apiVersion: "apps/v1"
+kind: "DaemonSet"
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}-promtail"
+  labels:
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-promtail"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-promtail"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9080"
+    spec:
+      serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}-promtail"
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      volumes:
+        - name: "config"
+          configMap:
+            name: "{{ .Release.Name }}-{{ .Chart.Name }}-promtail"
+        - name: "logs"
+          hostPath:
+            path: "/var/log"
+      containers:
+        - name: "promtail"
+          image: {{ .Values.promtail.image | default "grafana/promtail:latest" | quote }}
+          imagePullPolicy: "IfNotPresent"
+          args: ["-config.file=/etc/promtail/promtail.yaml"]
+          env:
+            - name: "HOSTNAME"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "spec.nodeName"
+          volumeMounts:
+            - name: "config"
+              mountPath: "/etc/promtail"
+            - name: "logs"
+              readOnly: true
+              mountPath: "/var/log"
+          ports:
+            - containerPort: 9080
+              protocol: "TCP"
+          resources:
+            rrequests:
+              cpu: {{ .Values.promtail.request_cpu | default "100m" | quote }}
+              memory: {{ .Values.promtail.request_mem | default "160Mi" | quote }}
+            limits:
+              cpu: {{ .Values.promtail.limit_cpu | default "100m" | quote }}
+              memory: {{ .Values.promtail.limit_mem | default "160Mi" | quote }}
+      nodeSelector:
+        kubernetes.io/os: "linux"
+      tolerations:
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"

@@ -22,11 +22,11 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "3100"
     spec:
-      serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}-rw"
+      serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}"
       volumes:
         - name: "config"
           configMap:
-            name: "{{ .Release.Name }}-{{ .Chart.Name }}-rw"
+            name: "{{ .Release.Name }}-{{ .Chart.Name }}"
         - name: "data"
           emptyDir: {}
       containers:
