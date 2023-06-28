@@ -3,6 +3,10 @@ kind: "Service"
 metadata:
   namespace: "{{ .Release.Namespace }}"
   name: "{{ .Release.Name }}-{{ .Chart.Name }}-read"
+  labels:
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   selector:
     app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-read"
@@ -17,6 +21,10 @@ kind: "Service"
 metadata:
   namespace: "{{ .Release.Namespace }}"
   name: "{{ .Release.Name }}-{{ .Chart.Name }}-write"
+  labels:
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   selector:
     app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-write"
@@ -31,6 +39,10 @@ kind: "Service"
 metadata:
   namespace: "{{ .Release.Namespace }}"
   name: "{{ .Release.Name }}-{{ .Chart.Name }}-gw"
+  labels:
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   selector:
     app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-gw"
@@ -45,6 +57,10 @@ kind: "Service"
 metadata:
   namespace: "{{ .Release.Namespace }}"
   name: "{{ .Release.Name }}-{{ .Chart.Name }}-join"
+  labels:
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   selector:
     app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-join"
