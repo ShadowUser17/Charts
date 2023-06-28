@@ -10,6 +10,14 @@ nginx:
 
 loki:
   image: "grafana/loki:2.8.2"
+  replicas: 2
+  aws_region: ""
+  aws_bucket: ""
+  alertmanager: ""
+  # request_cpu: "100m"
+  # request_mem: "100m"
+  # limit_cpu: "160Mi"
+  # limit_mem: "160Mi"
 
 promtail:
   image: "grafana/promtail:2.8.2"

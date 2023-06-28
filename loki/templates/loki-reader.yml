@@ -1,0 +1,64 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}-read"
+  labels:
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.loki.replicas | default "2" }}
+  strategy:
+    type: "Recreate"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-read"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-read"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3100"
+    spec:
+      serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}-rw"
+      volumes:
+        - name: "config"
+          configMap:
+            name: "{{ .Release.Name }}-{{ .Chart.Name }}-rw"
+        - name: "data"
+          emptyDir: {}
+      containers:
+        - name: "loki"
+          image: {{ .Values.loki.image | default "grafana/loki:latest" | quote }}
+          imagePullPolicy: "IfNotPresent"
+          args:
+            - "-config.file=/etc/loki/loki.yaml"
+            - "-target=read"
+          volumeMounts:
+            - name: "config"
+              mountPath: "/etc/loki"
+            - name: "data"
+              mountPath: "/var/loki"
+          ports:
+            - containerPort: 3100
+              protocol: "TCP"
+            - containerPort: 7946
+              protocol: "TCP"
+            - containerPort: 9095
+              protocol: "TCP"
+          resources:
+            equests:
+              cpu: {{ .Values.loki.request_cpu | default "100m" | quote }}
+              memory: {{ .Values.loki.request_mem | default "160Mi" | quote }}
+            limits:
+              cpu: {{ .Values.loki.limit_cpu | default "100m" | quote }}
+              memory: {{ .Values.loki.limit_mem | default "160Mi" | quote }}
+          livenessProbe:
+            initialDelaySeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 5
+            httpGet:
+              path: "/ready"
+              port: 3100

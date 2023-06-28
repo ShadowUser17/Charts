@@ -7,3 +7,14 @@ metadata:
     app.kubernetes.io/instance: "{{ .Release.Name }}"
     app.kubernetes.io/version: "{{ .Chart.Version }}"
     app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+
+---
+apiVersion: "v1"
+kind: "ServiceAccount"
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}-rw"
+  labels:
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
