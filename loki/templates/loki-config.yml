@@ -45,9 +45,10 @@ data:
         region: "{{ .Values.loki.aws_region }}"
         endpoint: "{{ .Values.loki.s3_endpoint }}"
         bucketnames: "{{ .Values.loki.s3_bucket }}"
+        access_key_id: "{{ .Values.loki.s3_key_id }}"
+        secret_access_key: "{{ .Values.loki.s3_key_secret }}"
         s3forcepathstyle: true
-        sse_encryption: false
-        insecure: false
+        insecure: true
       hedging:
         at: "250ms"
         up_to: 3

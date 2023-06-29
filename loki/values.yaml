@@ -18,6 +18,8 @@ loki:
   replicas: 2
   # aws_region: ""
   # s3_bucket: "loki-data"
+  # s3_key_id: ""
+  # s3_key_secret: ""
   # s3_endpoint: "minio.testing.svc:9000"
   # alertmanager: ""
   # request_cpu: "100m"
