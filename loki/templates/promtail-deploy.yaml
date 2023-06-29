@@ -19,7 +19,7 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9080"
     spec:
-      serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}-promtail"
+      serviceAccountName: "{{ .Release.Name }}-{{ .Chart.Name }}-promtail"
       securityContext:
         runAsUser: 0
         runAsGroup: 0

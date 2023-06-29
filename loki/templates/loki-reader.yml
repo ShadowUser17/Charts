@@ -25,10 +25,11 @@ spec:
         prometheus.io/port: "3100"
     spec:
       {{ if .Values.sa_name -}}
-      serviceAccount: "{{ .Values.sa_name }}"
+      serviceAccountName: "{{ .Values.sa_name }}"
       {{ else -}}
-      serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}"
+      serviceAccountName: "{{ .Release.Name }}-{{ .Chart.Name }}"
       {{ end -}}
+      automountServiceAccountToken: true
       volumes:
         - name: "config"
           configMap:
