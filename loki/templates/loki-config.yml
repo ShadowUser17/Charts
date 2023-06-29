@@ -48,9 +48,10 @@ data:
         access_key_id: "{{ .Values.loki.s3_key_id }}"
         secret_access_key: "{{ .Values.loki.s3_key_secret }}"
         s3forcepathstyle: true
+        sse_encryption: false
         {{ if not .Values.s3_is_aws -}}
         insecure: false
-        {{ end -}}
+        {{- end }}
       hedging:
         at: "250ms"
         up_to: 3
@@ -87,3 +88,7 @@ data:
         s3:
           bucketnames: "{{ .Values.loki.s3_bucket }}"
           s3forcepathstyle: true
+          sse_encryption: false
+          {{ if not .Values.s3_is_aws -}}
+          insecure: false
+          {{ end -}}
