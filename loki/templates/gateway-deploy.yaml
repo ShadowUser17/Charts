@@ -1,0 +1,43 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
+  labels:
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.nginx.replicas | default "1" }}
+  strategy:
+    type: "Recreate"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
+    spec:
+      serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
+      volumes:
+        - name: "config"
+          configMap:
+            name: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
+      containers:
+        - name: "nginx"
+          image: {{ .Values.nginx.image | default "nginx:latest" | quote }}
+          imagePullPolicy: "IfNotPresent"
+          volumeMounts:
+            - name: "config"
+              mountPath: "/etc/nginx"
+          ports:
+            - containerPort: 3100
+              protocol: "TCP"
+          resources:
+            requests:
+              cpu: {{ .Values.nginx.request_cpu | default "50m" | quote }}
+              memory: {{ .Values.nginx.request_mem | default "60Mi" | quote }}
+            limits:
+              cpu: {{ .Values.nginx.limit_cpu | default "50m" | quote }}
+              memory: {{ .Values.nginx.limit_mem | default "60Mi" | quote }}
