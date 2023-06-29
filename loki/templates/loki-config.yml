@@ -42,15 +42,18 @@ data:
         shared_store: "s3"
         cache_ttl: "24h"
       aws:
-        region: "{{ .Values.loki.aws_region }}"
-        endpoint: "{{ .Values.loki.s3_endpoint }}"
         bucketnames: "{{ .Values.loki.s3_bucket }}"
+        sse_encryption: false
+        {{ if .Values.loki.s3_is_aws -}}
+        region: "{{ .Values.loki.aws_region }}"
+        s3forcepathstyle: true
+        insecure: false
+        {{- else }}
+        endpoint: "{{ .Values.loki.s3_endpoint }}"
         access_key_id: "{{ .Values.loki.s3_key_id }}"
         secret_access_key: "{{ .Values.loki.s3_key_secret }}"
-        s3forcepathstyle: true
-        sse_encryption: false
-        {{ if not .Values.s3_is_aws -}}
-        insecure: false
+        s3forcepathstyle: false
+        insecure: true
         {{- end }}
       hedging:
         at: "250ms"
@@ -87,8 +90,11 @@ data:
         type: "s3"
         s3:
           bucketnames: "{{ .Values.loki.s3_bucket }}"
-          s3forcepathstyle: true
           sse_encryption: false
-          {{ if not .Values.s3_is_aws -}}
+          {{ if .Values.loki.s3_is_aws -}}
+          s3forcepathstyle: true
           insecure: false
-          {{ end -}}
+          {{ else -}}
+          s3forcepathstyle: false
+          insecure: true
+          {{- end }}
