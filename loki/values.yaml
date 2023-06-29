@@ -17,6 +17,7 @@ loki:
   image: "grafana/loki:2.8.2"
   replicas: 2
   # aws_region: ""
+  s3_is_aws: false
   s3_bucket: "loki-data"
   s3_key_id: "testing"
   s3_key_secret: "1qaz!QAZ"
