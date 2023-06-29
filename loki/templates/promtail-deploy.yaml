@@ -50,7 +50,7 @@ spec:
             - containerPort: 9080
               protocol: "TCP"
           resources:
-            rrequests:
+            requests:
               cpu: {{ .Values.promtail.request_cpu | default "100m" | quote }}
               memory: {{ .Values.promtail.request_mem | default "160Mi" | quote }}
             limits:

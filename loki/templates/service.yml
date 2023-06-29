@@ -9,7 +9,8 @@ metadata:
     app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   selector:
-    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-read"
+    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+    app.kubernetes.io/role: "read"
   ports:
     - name: "http"
       port: 3100
@@ -27,7 +28,8 @@ metadata:
     app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   selector:
-    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-write"
+    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+    app.kubernetes.io/role: "write"
   ports:
     - name: "http"
       port: 3100
@@ -63,7 +65,7 @@ metadata:
     app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
   selector:
-    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-join"
+    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
   ports:
     - name: "join"
       port: 7946

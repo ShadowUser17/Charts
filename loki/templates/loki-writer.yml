@@ -13,11 +13,13 @@ spec:
     type: "Recreate"
   selector:
     matchLabels:
-      app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-write"
+      app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+      app.kubernetes.io/role: "write"
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-write"
+        app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+        app.kubernetes.io/role: "write"
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "3100"
@@ -53,7 +55,7 @@ spec:
             - containerPort: 9095
               protocol: "TCP"
           resources:
-            equests:
+            requests:
               cpu: {{ .Values.loki.request_cpu | default "100m" | quote }}
               memory: {{ .Values.loki.request_mem | default "160Mi" | quote }}
             limits:
