@@ -51,8 +51,8 @@ spec:
               protocol: "TCP"
           resources:
             requests:
-              cpu: {{ .Values.promtail.request_cpu | default "100m" | quote }}
-              memory: {{ .Values.promtail.request_mem | default "165Mi" | quote }}
+              cpu: {{ .Values.promtail.limit_cpu | default "100m" | quote }}
+              memory: {{ .Values.promtail.limit_mem | default "165Mi" | quote }}
             limits:
               cpu: {{ .Values.promtail.limit_cpu | default "100m" | quote }}
               memory: {{ .Values.promtail.limit_mem | default "165Mi" | quote }}

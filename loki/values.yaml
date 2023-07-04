@@ -8,8 +8,6 @@ sa_create: true
 nginx:
   image: "nginx:1.25.1"
   # replicas: 1
-  # request_cpu: "100m"
-  # request_mem: "64Mi"
   # limit_cpu: "100m"
   # limit_mem: "64Mi"
 
@@ -30,7 +28,5 @@ loki:
 
 promtail:
   image: "grafana/promtail:2.8.2"
-  # request_cpu: "100m"
-  # request_mem: "165Mi"
   # limit_cpu: "100m"
   # limit_mem: "165Mi"
