@@ -39,6 +39,8 @@ data:
 
       server {
         listen 3100;
+        index index.html;
+        root /usr/share/nginx/html;
 
         location = /api/prom/push {
             proxy_pass http://write$request_uri;

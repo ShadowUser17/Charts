@@ -36,8 +36,8 @@ spec:
               protocol: "TCP"
           resources:
             requests:
-              cpu: {{ .Values.nginx.request_cpu | default "50m" | quote }}
-              memory: {{ .Values.nginx.request_mem | default "60Mi" | quote }}
+              cpu: {{ .Values.nginx.request_cpu | default "100m" | quote }}
+              memory: {{ .Values.nginx.request_mem | default "64Mi" | quote }}
             limits:
-              cpu: {{ .Values.nginx.limit_cpu | default "50m" | quote }}
-              memory: {{ .Values.nginx.limit_mem | default "60Mi" | quote }}
+              cpu: {{ .Values.nginx.limit_cpu | default "100m" | quote }}
+              memory: {{ .Values.nginx.limit_mem | default "64Mi" | quote }}

@@ -58,10 +58,10 @@ spec:
           resources:
             requests:
               cpu: {{ .Values.loki.request_cpu | default "100m" | quote }}
-              memory: {{ .Values.loki.request_mem | default "160Mi" | quote }}
+              memory: {{ .Values.loki.request_mem | default "200Mi" | quote }}
             limits:
               cpu: {{ .Values.loki.limit_cpu | default "100m" | quote }}
-              memory: {{ .Values.loki.limit_mem | default "160Mi" | quote }}
+              memory: {{ .Values.loki.limit_mem | default "200Mi" | quote }}
           livenessProbe:
             initialDelaySeconds: 20
             timeoutSeconds: 10
