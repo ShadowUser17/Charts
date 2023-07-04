@@ -8,8 +8,6 @@ sa_create: true
 nginx:
   image: "nginx:1.25.1"
   # replicas: 1
-  # request_cpu: "100m"
-  # request_mem: "64Mi"
   # limit_cpu: "100m"
   # limit_mem: "64Mi"
 
@@ -23,14 +21,12 @@ loki:
   s3_key_id: "testing"
   s3_key_secret: "1qaz!QAZ"
   # alertmanager: ""
-  # request_cpu: "100m"
-  # request_mem: "200Mi"
-  # limit_cpu: "100m"
-  # limit_mem: "200Mi"
+  reader_limit_cpu: "100m"
+  reader_limit_mem: "250Mi"
+  writer_limit_cpu: "100m"
+  writer_limit_mem: "200Mi"
 
 promtail:
   image: "grafana/promtail:2.8.2"
-  # request_cpu: "100m"
-  # request_mem: "165Mi"
   # limit_cpu: "100m"
   # limit_mem: "165Mi"
