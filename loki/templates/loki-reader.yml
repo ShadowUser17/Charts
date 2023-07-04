@@ -57,11 +57,11 @@ spec:
               protocol: "TCP"
           resources:
             requests:
-              cpu: {{ .Values.loki.request_cpu | default "100m" | quote }}
-              memory: {{ .Values.loki.request_mem | default "200Mi" | quote }}
+              cpu: {{ .Values.loki.reader_limit_cpu | default "100m" | quote }}
+              memory: {{ .Values.loki.reader_limit_mem | default "250Mi" | quote }}
             limits:
-              cpu: {{ .Values.loki.limit_cpu | default "100m" | quote }}
-              memory: {{ .Values.loki.limit_mem | default "200Mi" | quote }}
+              cpu: {{ .Values.loki.reader_limit_cpu | default "100m" | quote }}
+              memory: {{ .Values.loki.reader_limit_mem | default "250Mi" | quote }}
           livenessProbe:
             initialDelaySeconds: 20
             timeoutSeconds: 10
