@@ -1,4 +1,9 @@
-#### Deploy:
+#### Install:
 ```bash
-helm template logs ./loki -n testing -f loki/values.yaml
+helm install logs ./ -f values.yaml -n testing
+```
+
+#### Remove:
+```bash
+helm uninstall logs ./ -n testing
 ```
