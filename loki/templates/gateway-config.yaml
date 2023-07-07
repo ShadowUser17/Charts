@@ -10,7 +10,7 @@ metadata:
 data:
   nginx.conf: |
     worker_rlimit_nofile 8192;
-    worker_processes 3;
+    worker_processes 5;
     pid /tmp/nginx.pid;
     error_log /dev/stderr;
 
@@ -23,13 +23,11 @@ data:
         '"$request" $body_bytes_sent "$http_referer" '
         '"$http_user_agent" "$http_x_forwarded_for"';
 
-      default_type application/octet-stream;
       access_log /dev/stderr main;
-      proxy_http_version 1.1;
       sendfile on;
       tcp_nopush on;
-      tcp_nodelay on;
-      keepalive_timeout 60;
+      server_tokens off;
+      proxy_http_version 1.1;
       client_max_body_size 75m;
       proxy_connect_timeout 300;
       proxy_read_timeout 300;
@@ -45,8 +43,10 @@ data:
 
       server {
         listen 3100;
-        index index.html;
-        root /usr/share/nginx/html;
+
+        location = / {
+          return 200 'OK';
+        }
 
         location = /api/prom/push {
             proxy_pass http://write$request_uri;
@@ -82,6 +82,26 @@ data:
 
         location ~ /loki/api/.* {
             proxy_pass http://read$request_uri;
+        }
+
+        location ~ /distributor/.* {
+          proxy_pass http://write$request_uri;
+        }
+
+        location ~ /ring {
+          proxy_pass http://write$request_uri;
+        }
+
+        location ~ /ingester/.* {
+          proxy_pass http://write$request_uri;
+        }
+
+        location ~ /ruler/.* {
+          proxy_pass http://read$request_uri;
+        }
+
+        location ~ /scheduler/.* {
+          proxy_pass http://read$request_uri;
         }
       }
     }
