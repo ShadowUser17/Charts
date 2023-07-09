@@ -21,6 +21,9 @@ data:
     common:
       path_prefix: "/var/loki"
       replication_factor: {{ .Values.loki.replicas | default "2" }}
+      ring:
+        kvstore:
+          store: "memberlist"
 
     memberlist:
       bind_addr: ["0.0.0.0"]
@@ -71,7 +74,19 @@ data:
       max_cache_freshness_per_query: "10m"
 
     query_range:
+      max_retries: 5
       align_queries_with_step: true
+      cache_results: true
+      results_cache:
+        cache:
+          enable_fifocache: true
+          fifocache:
+            size: 1024
+            validity: "24h"
+
+    frontend:
+      compress_responses: true
+      log_queries_longer_than: "10s"
 
     compactor:
       shared_store: "s3"
