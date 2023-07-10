@@ -24,12 +24,17 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "3100"
     spec:
+      terminationGracePeriodSeconds: 30
       {{ if .Values.sa_name -}}
       serviceAccountName: "{{ .Values.sa_name }}"
       {{ else -}}
       serviceAccountName: "{{ .Release.Name }}-{{ .Chart.Name }}"
       {{ end -}}
       automountServiceAccountToken: true
+      securityContext:
+        fsGroup: 10001
+        runAsUser: 10001
+        runAsGroup: 10001
       volumes:
         - name: "config"
           configMap:
@@ -55,6 +60,11 @@ spec:
               protocol: "TCP"
             - containerPort: 9095
               protocol: "TCP"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
           resources:
             requests:
               cpu: {{ .Values.loki.reader_limit_cpu | default "100m" | quote }}
