@@ -107,6 +107,13 @@ data:
       chunk_idle_period: "5m"
       chunk_retain_period: "1m"
 
+    ingester_client:
+      grpc_client_config:
+        # gRPC client max receive message size (bytes).
+        max_recv_msg_size: 104857600
+        # gRPC client max send message size (bytes).
+        max_send_msg_size: 104857600
+
     ruler:
       enable_alertmanager_v2: true
       alertmanager_url: "{{ .Values.loki.alertmanager }}"
