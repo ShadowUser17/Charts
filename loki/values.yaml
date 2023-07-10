@@ -6,12 +6,14 @@ sa_create: true
 #   eks.amazonaws.com/sts-regional-endpoints: "true"
 
 nginx:
-  image: "nginx:1.25.1"
+  # https://hub.docker.com/r/nginxinc/nginx-unprivileged/tags
+  image: "nginxinc/nginx-unprivileged:1.25.1"
   # replicas: 1
   # limit_cpu: "100m"
   # limit_mem: "64Mi"
 
 loki:
+  # https://hub.docker.com/r/grafana/loki/tags
   image: "grafana/loki:2.8.2"
   replicas: 2
   s3_is_aws: false
@@ -27,6 +29,7 @@ loki:
   writer_limit_mem: "200Mi"
 
 promtail:
+  # https://hub.docker.com/r/grafana/promtail/tags
   image: "grafana/promtail:2.8.2"
   # limit_cpu: "100m"
   # limit_mem: "165Mi"

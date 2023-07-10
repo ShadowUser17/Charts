@@ -19,14 +19,19 @@ spec:
       labels:
         app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
     spec:
+      terminationGracePeriodSeconds: 30
       serviceAccountName: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
+      securityContext:
+        fsGroup: 101
+        runAsUser: 101
+        runAsGroup: 101
       volumes:
         - name: "config"
           configMap:
             name: "{{ .Release.Name }}-{{ .Chart.Name }}-gateway"
       containers:
         - name: "nginx"
-          image: {{ .Values.nginx.image | default "nginx:latest" | quote }}
+          image: {{ .Values.nginx.image | default "nginxinc/nginx-unprivileged:latest" | quote }}
           imagePullPolicy: "IfNotPresent"
           volumeMounts:
             - name: "config"
@@ -34,6 +39,11 @@ spec:
           ports:
             - containerPort: 3100
               protocol: "TCP"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
           resources:
             requests:
               cpu: {{ .Values.nginx.limit_cpu | default "100m" | quote }}
