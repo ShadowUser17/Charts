@@ -16,6 +16,10 @@ data:
       grpc_listen_address: 0.0.0.0
       http_listen_port: 3100
       grpc_listen_port: 9095
+      # Limit on the size of a gRPC message this server can receive (bytes).
+      grpc_server_max_recv_msg_size: 104857600
+      # Limit on the size of a gRPC message this server can send (bytes).
+      grpc_server_max_send_msg_size: 104857600
       log_level: "info"
 
     common:
