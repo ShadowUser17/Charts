@@ -12,15 +12,17 @@ data:
     auth_enabled: false
 
     server:
+      log_level: "info"
       http_listen_address: 0.0.0.0
-      grpc_listen_address: 0.0.0.0
       http_listen_port: 3100
+      http_server_read_timeout: "300s"
+      http_server_write_timeout: "300s"
+      grpc_listen_address: 0.0.0.0
       grpc_listen_port: 9095
       # Limit on the size of a gRPC message this server can receive (bytes).
       grpc_server_max_recv_msg_size: 104857600
       # Limit on the size of a gRPC message this server can send (bytes).
       grpc_server_max_send_msg_size: 104857600
-      log_level: "info"
 
     common:
       path_prefix: "/var/loki"
@@ -93,14 +95,13 @@ data:
 
     query_scheduler:
       # In-flight requests above this limit will fail with HTTP response status code 429
-      max_outstanding_requests_per_tenant: 300
+      # max_outstanding_requests_per_tenant: 300
 
     compactor:
       shared_store: "s3"
       compaction_interval: "10m"
 
     ingester:
-      max_transfer_retries: 0
       # The algorithm to use for compressing chunk. (none, gzip, lz4-64k, snappy, lz4-256k, lz4-1M, lz4, flate, zstd)
       chunk_encoding: "snappy"
       chunk_idle_period: "5m"
