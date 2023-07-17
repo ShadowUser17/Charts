@@ -97,6 +97,9 @@ data:
       # In-flight requests above this limit will fail with HTTP response status code 429
       # max_outstanding_requests_per_tenant: 300
 
+    querier:
+      # query_timeout: "300s"
+
     compactor:
       shared_store: "s3"
       compaction_interval: "10m"
@@ -104,7 +107,9 @@ data:
     ingester:
       # The algorithm to use for compressing chunk. (none, gzip, lz4-64k, snappy, lz4-256k, lz4-1M, lz4, flate, zstd)
       chunk_encoding: "snappy"
+      # How long chunks should sit in-memory with no updates before being flushed.
       chunk_idle_period: "5m"
+      # How long chunks should be retained in-memory after they've been flushed.
       chunk_retain_period: "1m"
 
     ingester_client:
