@@ -26,7 +26,6 @@ data:
 
     common:
       path_prefix: "/var/loki"
-      replication_factor: {{ .Values.loki.replicas | default "2" }}
       ring:
         kvstore:
           store: "memberlist"
@@ -100,11 +99,24 @@ data:
       # The maximum number of concurrent queries allowed.
       max_concurrent: 20
 
+    index_gateway:
+      ring:
+        # How many index gateway instances are assigned to each tenant.
+        replication_factor: {{ .Values.loki.reader_replicas | default "2" }}
+        kvstore:
+          store: "memberlist"
+
     compactor:
       shared_store: "s3"
       compaction_interval: "10m"
 
     ingester:
+      lifecycler:
+        ring:
+          # The number of ingesters to write to and read from.
+          replication_factor: {{ .Values.loki.writer_replicas | default "2" }}
+          kvstore:
+            store: "memberlist"
       # The algorithm to use for compressing chunk. (none, gzip, lz4-64k, snappy, lz4-256k, lz4-1M, lz4, flate, zstd)
       chunk_encoding: "snappy"
       # How long chunks should sit in-memory with no updates before being flushed.

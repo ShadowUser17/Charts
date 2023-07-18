@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/version: "{{ .Chart.Version }}"
     app.kubernetes.io/managed-by: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.loki.replicas | default "2" }}
+  replicas: {{ .Values.loki.reader_replicas | default "2" }}
   strategy:
     type: "Recreate"
   selector:
