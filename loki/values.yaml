@@ -7,14 +7,14 @@ sa_create: true
 
 nginx:
   # https://hub.docker.com/r/nginxinc/nginx-unprivileged/tags
-  image: "nginxinc/nginx-unprivileged:1.25.1"
+  image: "nginxinc/nginx-unprivileged:1.25.2"
   # replicas: 1
   # limit_cpu: "100m"
   # limit_mem: "64Mi"
 
 loki:
   # https://hub.docker.com/r/grafana/loki/tags
-  image: "grafana/loki:2.8.4"
+  image: "grafana/loki:2.9.0"
   writer_replicas: 2
   reader_replicas: 2
   s3_is_aws: false
@@ -31,6 +31,6 @@ loki:
 
 promtail:
   # https://hub.docker.com/r/grafana/promtail/tags
-  image: "grafana/promtail:2.8.4"
+  image: "grafana/promtail:2.9.0"
   # limit_cpu: "100m"
   # limit_mem: "165Mi"
