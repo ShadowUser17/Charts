@@ -1,4 +1,0 @@
-apiVersion: "v2"
-version: "1.0"
-name: "loki-tests"
-type: "application"
