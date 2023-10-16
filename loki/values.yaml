@@ -14,7 +14,7 @@ nginx:
 
 loki:
   # https://hub.docker.com/r/grafana/loki/tags
-  image: "grafana/loki:2.9.0"
+  image: "grafana/loki:2.9.2"
   writer_replicas: 2
   reader_replicas: 2
   s3_is_aws: false
@@ -31,6 +31,6 @@ loki:
 
 promtail:
   # https://hub.docker.com/r/grafana/promtail/tags
-  image: "grafana/promtail:2.9.0"
+  image: "grafana/promtail:2.9.2"
   # limit_cpu: "100m"
   # limit_mem: "165Mi"
