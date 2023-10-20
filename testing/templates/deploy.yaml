@@ -18,6 +18,8 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+      annotations:
+        checksum/config: {{ include (print .Template.BasePath "/config.yaml") . | sha256sum | quote }}
     spec:
       {{ if .Values.serviceAccount.name -}}
       serviceAccount: "{{ .Values.serviceAccount.name }}"
