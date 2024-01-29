@@ -1,11 +1,17 @@
 namespace:
   create: false
+  labels: {}
 
 serviceAccount:
   create: true
+  name: ""
+  annotations: {}
 
 configMap:
   create: false
+  name: ""
+  configName: ""
+  configData: ""
 
 deploy:
   replicas: 1
