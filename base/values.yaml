@@ -16,8 +16,10 @@ configMap:
 deploy:
   replicas: 1
   strategy: "Recreate"
-  securityContext:
-    create: false
+  volumes: []
+  containers: []
+  podAnnotations: {}
+  securityContext: {}
 
 containers:
   image: "nginx:latest"
@@ -26,4 +28,18 @@ containers:
 
 service:
   create: true
-  port: 80
+  labels: {}
+  ports:
+    - name: "http"
+      port: 80
+      protocol: "TCP"
+      targetPort: "http"
+
+monitoring:
+  enabled: true
+  labels:
+    release: "prom-operator"
+  endpoints:
+    - port: "http"
+      interval: "30s"
+      honorLabels: true

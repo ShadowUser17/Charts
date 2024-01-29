@@ -20,42 +20,24 @@ spec:
         app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
       annotations:
         checksum/config: {{ include (print .Template.BasePath "/config.yaml") . | sha256sum | quote }}
+        {{- with .Values.deploy.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{ if .Values.serviceAccount.name -}}
       serviceAccount: "{{ .Values.serviceAccount.name }}"
       {{ else -}}
       serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}"
       {{ end -}}
-      {{ if .Values.deploy.securityContext.create -}}
+      {{- with .Values.deploy.securityContext }}
       securityContext:
-        fsGroup: {{ .Values.deploy.securityContext.fsGroup }}
-        runAsUser: {{ .Values.deploy.securityContext.runAsUser }}
-        runAsGroup: {{ .Values.deploy.securityContext.runAsGroup }}
+        {{- toYaml . | nindent 8 }}
       {{ end -}}
-      {{ if .Values.configMap.create -}}
+      {{- with .Values.deploy.volumes }}
       volumes:
-        - name: "{{ .Release.Name }}-{{ .Chart.Name }}-config"
-          configMap:
-            name: "{{ .Release.Name }}-{{ .Chart.Name }}-config"
+        {{- toYaml . | nindent 8 }}
       {{ end -}}
       containers:
-        - name: {{ .Values.containers.image | default "app" | quote }}
-          image: "{{ .Values.containers.image }}"
-          imagePullPolicy: "IfNotPresent"
-          {{ if .Values.configMap.create -}}
-          volumeMounts:
-            - name: "{{ .Release.Name }}-{{ .Chart.Name }}-config"
-              mountPath: "{{ .Values.configMap.mountPath }}"
-          {{ end -}}
-          ports:
-            - containerPort: {{ .Values.service.port }}
-              protocol: "TCP"
-          {{ if .Values.containers.resources.create -}}
-          resources:
-            requests:
-              cpu: {{ .Values.containers.resources.cpu | default "30m" | quote }}
-              memory: {{ .Values.containers.resources.memory | default "100mi" | quote }}
-            limits:
-              cpu: {{ .Values.containers.resources.cpu | default "30m" | quote }}
-              memory: {{ .Values.containers.resources.memory | default "100mi" | quote }}
-          {{ end -}}
+        {{- with .Values.deploy.containers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}

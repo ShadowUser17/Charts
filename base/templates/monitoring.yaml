@@ -1,6 +1,6 @@
-{{ if .Values.service.create -}}
-apiVersion: "v1"
-kind: "Service"
+{{ if .Values.monitoring.enabled -}}
+apiVersion: "monitoring.coreos.com/v1"
+kind: "PodMonitor"
 metadata:
   namespace: "{{ .Release.Namespace }}"
   name: "{{ .Release.Name }}-{{ .Chart.Name }}"
@@ -8,14 +8,15 @@ metadata:
     app.kubernetes.io/managed-by: "{{ .Release.Service }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"
     app.kubernetes.io/version: "{{ .Chart.Version }}"
-    {{- with .Values.service.labels }}
+    {{- with .Values.monitoring.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   selector:
-    app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
-  ports:
-  {{- with .Values.service.ports }}
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  podMetricsEndpoints:
+  {{- with .Values.monitoring.endpoints }}
     {{- toYaml . | nindent 4 }}
   {{ end -}}
 {{ end -}}
