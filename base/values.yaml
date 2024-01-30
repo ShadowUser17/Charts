@@ -17,14 +17,21 @@ deploy:
   replicas: 1
   strategy: "Recreate"
   volumes: []
-  containers: []
+  containers:
+    - name: "app"
+      image: "nginx:latest"
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - name: "http"
+          protocol: "TCP"
+          containerPort: 80
+  initContainers: {}
   podAnnotations: {}
   securityContext: {}
-
-containers:
-  image: "nginx:latest"
-  resources:
-    create: false
+  nodeSelector:
+    kubernetes.io/os: "linux"
+  tolerations: []
+  affinity: {}
 
 service:
   create: true
@@ -36,7 +43,7 @@ service:
       targetPort: "http"
 
 monitoring:
-  enabled: true
+  enabled: false
   labels:
     release: "prom-operator"
   endpoints:

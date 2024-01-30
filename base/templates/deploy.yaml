@@ -9,8 +9,10 @@ metadata:
     app.kubernetes.io/version: "{{ .Chart.Version }}"
 spec:
   replicas: {{ .Values.deploy.replicas }}
+  {{ if .Values.deploy.strategy -}}
   strategy:
     type: "{{ .Values.deploy.strategy }}"
+  {{ end -}}
   selector:
     matchLabels:
       app.kubernetes.io/name: "{{ .Release.Name }}-{{ .Chart.Name }}"
@@ -29,15 +31,31 @@ spec:
       {{ else -}}
       serviceAccount: "{{ .Release.Name }}-{{ .Chart.Name }}"
       {{ end -}}
-      {{- with .Values.deploy.securityContext }}
+      {{ with .Values.deploy.securityContext -}}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{ end -}}
-      {{- with .Values.deploy.volumes }}
+      {{ with .Values.deploy.volumes -}}
       volumes:
+        {{- toYaml . | nindent 8 }}
+      {{ end -}}
+      {{ with .Values.deploy.initContainers -}}
+      initContainers:
         {{- toYaml . | nindent 8 }}
       {{ end -}}
       containers:
         {{- with .Values.deploy.containers }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+      {{ with .Values.deploy.affinity -}}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{ end -}}
+      {{ with .Values.deploy.tolerations -}}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{ end -}}
+      {{ with .Values.deploy.nodeSelector -}}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{ end -}}
