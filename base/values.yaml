@@ -35,12 +35,21 @@ deploy:
 
 service:
   create: true
+  name: ""
   labels: {}
   ports:
     - name: "http"
       port: 80
       protocol: "TCP"
       targetPort: "http"
+
+ingress:
+  create: false
+  name: ""
+  ingressClass: "nginx"
+  annotations: {}
+  tls: []
+  rules: []
 
 monitoring:
   enabled: false
